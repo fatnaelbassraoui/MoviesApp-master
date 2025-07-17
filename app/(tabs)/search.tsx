@@ -3,6 +3,7 @@ import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
 import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
+import { updateSearchCount } from "@/services/appwrite";
 import useFetch from "@/services/useFetch";
 import React, { useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
@@ -13,6 +14,7 @@ const Search = () => {
   const { data: movies, loading, error, refetch: loadMovies, reset } = useFetch(() => fetchMovies({ query: searchQuery }), false);
 
   useEffect(() => {
+    updateSearchCount();
     // debouncing can debounce a search term by wrapping it into timeout function to avoid making an api call for each letter you type in the serchBar
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
