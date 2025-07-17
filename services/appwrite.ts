@@ -14,7 +14,7 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
   try {
     const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [Query.equal("searchTerm", query)]);
 
-    console.log(result);
+    //console.log("result", result);
 
     if (result.documents.length > 0) {
       const existingMovie = result.documents[0];
@@ -38,7 +38,12 @@ export const updateSearchCount = async (query: string, movie: Movie) => {
 
 export const getTrendingMovies = async (): Promise<TrendingMovie[] | undefined> => {
   try {
-    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [Query.limit(5), Query.orderDesc("count")]);
+    //we get only the top 5 movies that people have searched for, sorted by the count
+    const result = await database.listDocuments(DATABASE_ID, COLLECTION_ID, [
+      Query.limit(5), //get jus teh first five element
+      Query.orderDesc("count"),
+    ]); // order based on  count field.
+    console.log("restlt get", result);
 
     return result.documents as unknown as TrendingMovie[];
   } catch (error) {

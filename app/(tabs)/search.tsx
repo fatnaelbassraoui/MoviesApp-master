@@ -14,7 +14,6 @@ const Search = () => {
   const { data: movies, loading, error, refetch: loadMovies, reset } = useFetch(() => fetchMovies({ query: searchQuery }), false);
 
   useEffect(() => {
-    updateSearchCount();
     // debouncing can debounce a search term by wrapping it into timeout function to avoid making an api call for each letter you type in the serchBar
     const timeoutId = setTimeout(async () => {
       if (searchQuery.trim()) {
@@ -25,6 +24,12 @@ const Search = () => {
     }, 500);
     return () => clearTimeout(timeoutId);
   }, [searchQuery]);
+
+  useEffect(() => {
+    if (movies?.length! > 0 && movies?.[0]) {
+      updateSearchCount(searchQuery, movies[0]);
+    }
+  }, [movies]);
 
   return (
     <View className="flex-1 bg-primary">
