@@ -1,10 +1,6 @@
-//fetchMovies
-//fetchMoviesDetails
-
 import { useEffect, useState } from "react";
 
-//useFetch(fetchMovies)
-const useFetch = <T>(fetchFunction: () => Promise<T>, autofetch = true) => {
+const useFetch = <T>(fetchFunction: () => Promise<T>, autoFetch = true) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
@@ -13,10 +9,11 @@ const useFetch = <T>(fetchFunction: () => Promise<T>, autofetch = true) => {
     try {
       setLoading(true);
       setError(null);
+
       const result = await fetchFunction();
       setData(result);
     } catch (err) {
-      setError(err instanceof Error ? err : new Error("An error occurred"));
+      setError(err instanceof Error ? err : new Error("An unknown error occurred"));
     } finally {
       setLoading(false);
     }
@@ -24,12 +21,12 @@ const useFetch = <T>(fetchFunction: () => Promise<T>, autofetch = true) => {
 
   const reset = () => {
     setData(null);
-    setLoading(false);
     setError(null);
+    setLoading(false);
   };
 
   useEffect(() => {
-    if (fetchData) {
+    if (autoFetch) {
       fetchData();
     }
   }, []);
